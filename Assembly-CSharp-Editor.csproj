@@ -80,9 +80,6 @@
     <Compile Include="Assets\Bearded Man Studios Inc\Editor\IFNSerializable.cs" />
     <Compile Include="Assets\Bearded Man Studios Inc\Editor\SimpleJSONEditor.cs" />
     <Compile Include="Assets\Bearded Man Studios Inc\Editor\ValidationResult.cs" />
-    <Compile Include="Assets\ForgeECS\Editor\NetworkObjectComponentProxy.cs" />
-    <Compile Include="Assets\ForgeECS\Editor\NetworkReceiveBufferComponentProxy.cs" />
-    <Compile Include="Assets\ForgeECS\Editor\NetworkSendBufferComponentProxy.cs" />
     <None Include="Assets\Bearded Man Studios Inc\Editor\Resources\BMS_Forge_Editor\NetworkBehaviorTemplate.txt" />
     <None Include="Assets\Bearded Man Studios Inc\Editor\Resources\BMS_Forge_Editor\NetworkObjectTemplate.txt" />
     <None Include="Assets\Bearded Man Studios Inc\Editor\Resources\BMS_Forge_Editor\NetworkObjectFactoryTemplate.txt" />
