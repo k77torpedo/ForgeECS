@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 [Serializable]
 [StructLayout(LayoutKind.Sequential)]
-public struct BinaryMessage {
+public struct GenericMessage {
     //Fields
-    public int someNumber;
+    public int genericNumber;
 }

@@ -3,6 +3,6 @@ using Unity.Entities;
 
 [DisallowMultipleComponent]
 [AddComponentMenu("DOTS/NetworkSendBufferComponent")]
-public class NetworkSendBufferComponentProxy : DynamicBufferProxy<NetworkSendBufferComponent> {
+public class GenericMessageSendBufferComponentProxy : DynamicBufferProxy<GenericMessageSendBufferComponent> {
 }
 
