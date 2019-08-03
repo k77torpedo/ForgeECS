@@ -345,6 +345,7 @@ public class ECSNetworkManager : MonoBehaviour {
                 entity,
                 new NetworkObjectComponent() {
                     networkId = pObj.NetworkId,
+                    identity = pObj.UniqueIdentity,
                     isOwner = pObj.IsOwner,
                     isServer = pObj.IsServer
                 });

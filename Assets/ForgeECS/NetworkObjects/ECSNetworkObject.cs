@@ -86,6 +86,7 @@ namespace BeardedManStudios.Forge.Networking.Generated {
                 AttachedEntity,
                 new NetworkObjectComponent() {
                     networkId = NetworkId,
+                    identity = UniqueIdentity,
                     isOwner = IsOwner,
                     isServer = IsServer
                 });
