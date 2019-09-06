@@ -184,16 +184,14 @@
     <Compile Include="Assets\Bearded Man Studios Inc\Scripts\Server Browser\ServerBrowserItem.cs" />
     <Compile Include="Assets\Bearded Man Studios Inc\Scripts\TemplateSystem.cs" />
     <Compile Include="Assets\Bearded Man Studios Inc\Scripts\UnityObjectMapper.cs" />
-    <Compile Include="Assets\ForgeECS\ComponentProxies\GenericMessageReceiveBufferComponentProxy.cs" />
-    <Compile Include="Assets\ForgeECS\ComponentProxies\GenericMessageSendBufferComponentProxy.cs" />
     <Compile Include="Assets\ForgeECS\ComponentProxies\NetworkObjectComponentProxy.cs" />
     <Compile Include="Assets\ForgeECS\ComponentProxies\NetworkObjectCreateComponentProxy.cs" />
     <Compile Include="Assets\ForgeECS\ComponentProxies\NetworkObjectDestroyComponentProxy.cs" />
-    <Compile Include="Assets\ForgeECS\Components\GenericMessageReceiveBufferComponent.cs" />
-    <Compile Include="Assets\ForgeECS\Components\GenericMessageSendBufferComponent.cs" />
     <Compile Include="Assets\ForgeECS\Components\NetworkObjectComponent.cs" />
     <Compile Include="Assets\ForgeECS\Components\NetworkObjectCreateComponent.cs" />
     <Compile Include="Assets\ForgeECS\Components\NetworkObjectDestroyComponent.cs" />
+    <Compile Include="Assets\ForgeECS\Components\UpdatePositionBufferComponent.cs" />
+    <Compile Include="Assets\ForgeECS\Components\UpdateRotationBufferComponent.cs" />
     <Compile Include="Assets\ForgeECS\MonoBehaviors\ECSNetworkManager.cs" />
     <Compile Include="Assets\ForgeECS\MonoBehaviors\ECSNetworkManagerEndpoint.cs" />
     <Compile Include="Assets\ForgeECS\MonoBehaviors\ECSNetworkManagerSetting.cs" />
@@ -201,7 +199,12 @@
     <Compile Include="Assets\ForgeECS\NetworkObjects\IECSNetworkObject.cs" />
     <Compile Include="Assets\ForgeECS\Other\BlittableBool.cs" />
     <Compile Include="Assets\ForgeECS\Other\DynamicNetworkObjectFactory.cs" />
-    <Compile Include="Assets\ForgeECS\Other\GenericMessage.cs" />
+    <Compile Include="Assets\ForgeECS\Other\UpdatePosition.cs" />
+    <Compile Include="Assets\ForgeECS\Other\UpdateRotation.cs" />
+    <Compile Include="Assets\ForgeECS\Systems\NetworkObjectCreateSystem.cs" />
+    <Compile Include="Assets\ForgeECS\Systems\NetworkObjectDestroySystem.cs" />
+    <Compile Include="Assets\ForgeECS\Systems\UpdatePositionSystem.cs" />
+    <Compile Include="Assets\ForgeECS\Systems\UpdateRotationSystem.cs" />
     <None Include="Assets\Logs\bmslog.txt" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Unity3D Projects/ForgeECS/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
@@ -247,6 +250,9 @@
     </Reference>
     <Reference Include="Unity.Timeline">
       <HintPath>C:/Unity3D Projects/ForgeECS/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Rendering.Hybrid">
+      <HintPath>C:/Unity3D Projects/ForgeECS/Library/ScriptAssemblies/Unity.Rendering.Hybrid.dll</HintPath>
     </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
       <HintPath>C:/Unity3D Projects/ForgeECS/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>

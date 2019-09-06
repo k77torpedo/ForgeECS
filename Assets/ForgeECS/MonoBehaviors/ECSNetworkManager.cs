@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Collections;
 using Unity.Entities;
 using BeardedManStudios;
 using BeardedManStudios.Forge.Networking;
@@ -13,18 +14,24 @@ using BeardedManStudios.Forge.Networking.Unity;
 public class ECSNetworkManager : MonoBehaviour {
     //Fields
     public const string DEFAULT_WORLD_NAME = "ForgeECS";
-    [SerializeField] string worldName;
-    [SerializeField] ECSNetworkManagerSetting _settings;
-    [SerializeField] GameObject[] _prefabEntityArchetypes;
+    private static ECSNetworkManager _instance;
 
-    World _world;
-    EntityManager _entityManager;
-    NetWorker _networker;
-    BMSByte _tmpMetadata;
-    DynamicNetworkObjectFactory _factory;
+    [SerializeField] private ECSNetworkManagerSetting _settings;
+    [SerializeField] private GameObject[] _prefabEntityArchetypes;
 
+    private World _world;
+    private EntityManager _entityManager;
+    private NetWorker _networker;
+    private DynamicNetworkObjectFactory _factory;
+    private BMSByte _tmpMetadata;
+
+    public World World { get { return _world; } }
+    public NetWorker Networker { get { return _networker; } }
     public EntityManager EntityManager { get { return _entityManager; } }
+    public DynamicNetworkObjectFactory Factory { get { return _factory; } }
 
+    public static ECSNetworkManager Instance { get { return _instance; } }
+    public static bool IsInitialized { get { return _instance != null; } }
 
     //Events
     public delegate void NetworkFailedToBindEvent (ECSNetworkManager pNetworkManager);
@@ -35,14 +42,21 @@ public class ECSNetworkManager : MonoBehaviour {
 
     //Functions
     #region Unity
-    void Awake () {
+    private void Awake () {
+        if (ECSNetworkManager.IsInitialized) {
+            Destroy(gameObject);
+            return;
+        }
+
+        _instance = this;
         _tmpMetadata = new BMSByte();
+        DontDestroyOnLoad(gameObject);
     }
 
     //################## TEST!!!!!
 
 
-    void OnGUI () {
+    private void OnGUI () {
         //if (_networker == null) {
         //    return;
         //}
@@ -58,9 +72,33 @@ public class ECSNetworkManager : MonoBehaviour {
         InstantiateNetworkObject(ECSNetworkObject.IDENTITY, 0);
     }
 
+    public void InstantiateFromECSTest () {
+        NativeArray<Entity> entities = _entityManager.GetAllEntities();
+        if (entities.Length <= 0) {
+            return;
+        }
+
+        _entityManager.AddComponent<NetworkObjectCreateComponent>(entities[0]);
+        _entityManager.SetComponentData(
+            entities[0],
+            new NetworkObjectCreateComponent() {
+                identity = ECSNetworkObject.IDENTITY,
+                createCode = 0
+            }
+        );
+    }
+
     public void DestroyTest () {
         foreach (var item in _networker.NetworkObjects.Values) {
-            item.Destroy(50);
+            item.Destroy();
+        }
+    }
+
+    public void DestroyFromECSTest () {
+        NativeArray<Entity> entities = _entityManager.GetAllEntities();
+        foreach (var entity in entities) {
+            _entityManager.AddComponent<NetworkObjectDestroyComponent>(entity);
+            break;
         }
     }
 
@@ -74,7 +112,7 @@ public class ECSNetworkManager : MonoBehaviour {
 
 
 
-    void OnDestroy () {
+    private void OnDestroy () {
         if (_networker != null) {
             if (_networker.IsServer) {
                 UnregisterEventsServer();
@@ -89,7 +127,7 @@ public class ECSNetworkManager : MonoBehaviour {
         }
     }
 
-    void OnApplicationQuit () {
+    private void OnApplicationQuit () {
         Disconnect();
         NetWorker.EndSession();
         if (_world != null) {
@@ -178,28 +216,28 @@ public class ECSNetworkManager : MonoBehaviour {
     #endregion
 
     #region Register Events
-    protected virtual void RegisterEventsClient () {
+    private void RegisterEventsClient () {
         if (_networker != null) {
             _networker.objectCreated += FlushCreateActions;
             _networker.factoryObjectCreated += FlushCreateActions;
         }
     }
 
-    protected virtual void UnregisterEventsClient () {
+    private void UnregisterEventsClient () {
         if (_networker != null) {
             _networker.objectCreated -= FlushCreateActions;
             _networker.factoryObjectCreated -= FlushCreateActions;
         }
     }
 
-    protected virtual void RegisterEventsServer () {
+    private void RegisterEventsServer () {
         if (_networker != null) {
             _networker.objectCreated += FlushCreateActions;
             _networker.factoryObjectCreated += FlushCreateActions;
         }
     }
 
-    protected virtual void UnregisterEventsServer () {
+    private void UnregisterEventsServer () {
         if (_networker != null) {
             _networker.objectCreated -= FlushCreateActions;
             _networker.factoryObjectCreated -= FlushCreateActions;
@@ -209,19 +247,19 @@ public class ECSNetworkManager : MonoBehaviour {
     #endregion
 
     #region Events
-    void RaiseFailedToBind (ECSNetworkManager pNetworkManager) {
+    private void RaiseFailedToBind (ECSNetworkManager pNetworkManager) {
         if (OnFailedToBind != null) {
             OnFailedToBind(pNetworkManager);
         }
     }
 
-    void RaiseStart(ECSNetworkManager pNetworkManager) {
+    private void RaiseStart (ECSNetworkManager pNetworkManager) {
         if (OnStart != null) {
             OnStart(pNetworkManager);
         }
     }
 
-    void FlushCreateActions (NetworkObject pObj) {
+    private void FlushCreateActions (NetworkObject pObj) {
         if (pObj.CreateCode < 0) {
             return;
         }
@@ -252,12 +290,7 @@ public class ECSNetworkManager : MonoBehaviour {
 
         UnityObjectMapper.Instance.UseAsDefault();
         RegisterFactory();
-        if (string.IsNullOrEmpty(worldName)) {
-            _world = new World(DEFAULT_WORLD_NAME);
-        } else {
-            _world = new World(worldName);
-        }
-
+        _world = World.Active;
         _entityManager = _world.EntityManager;
     }
 
@@ -339,6 +372,7 @@ public class ECSNetworkManager : MonoBehaviour {
             //Associate the NetworkObject with the Entity
             ecsObj.AttachedEntity = entity;
             ecsObj.AttachedManager = this;
+            ecsObj.RegisterComponents();
 
             _entityManager.AddComponent<NetworkObjectComponent>(entity);
             _entityManager.SetComponentData<NetworkObjectComponent>(

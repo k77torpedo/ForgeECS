@@ -131,6 +131,9 @@
     <Reference Include="Unity.Timeline">
       <HintPath>C:/Unity3D Projects/ForgeECS/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Rendering.Hybrid">
+      <HintPath>C:/Unity3D Projects/ForgeECS/Library/ScriptAssemblies/Unity.Rendering.Hybrid.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
       <HintPath>C:/Unity3D Projects/ForgeECS/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
